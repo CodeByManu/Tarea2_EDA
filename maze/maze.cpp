@@ -11,6 +11,7 @@ const int Maze::NORTH= 0;
 const int Maze::SOUTH= 1;
 const int Maze::EAST= 2;
 const int Maze::WEST= 3;
+
 Maze::Maze(int h, int w):
 		height(h),
 		width(w),
@@ -21,13 +22,12 @@ Maze::Maze(int h, int w):
 	dir[3] = WEST;
 	std::srand(time(0));
 	generate_maze(h, w);
-
 }
 
 void Maze::reset_maze(int h, int w){
 	delete_maze();
 	height = h;
-	width= w;
+	width = w;
 	grid = new uchar*[height];
 	for (int i = 0; i < height; i++){
 		grid[i] = new uchar[width];
@@ -95,7 +95,6 @@ void Maze::visit(int i, int j){
 		if (inRange(i_next, j_next) && grid[i_next][j_next] == 1){
 			grid[i_next - dy][j_next - dx] = 0;
 			visit(i_next, j_next);
-
 		}
 	}
 }
@@ -129,5 +128,14 @@ void Maze::print(){
 	std::cout << " ";
 	std::cout << std::endl;
 }
+
+	//TAREA
+	bool Maze::getBox(int i, int j){	//Retorna true si la casilla esta vacia, o sea, es accedible
+		if (inRange(i, j)){
+			return grid[i][j] == 0;
+		}
+		return false;
+	}
+	//TAREA
 
 }

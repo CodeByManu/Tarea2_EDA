@@ -23,6 +23,9 @@ namespace maze {
 		void reset_maze(int h, int w);
 		bool inRange(int i, int j);
 		void print();
+		//TAREA
+		bool getBox(int i, int j);
+		//TAREA
 
 	};
 }
