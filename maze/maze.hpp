@@ -1,3 +1,6 @@
+#include "../ADT's/stack.hpp"
+#include <stack>
+
 namespace maze {
 	typedef unsigned char uchar;
 
@@ -25,6 +28,9 @@ namespace maze {
 		void print();
 		//TAREA
 		bool getBox(int i, int j);
+		void shuffle(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY);
+		int Split(int i, int j, std::stack<int> &Stack_splitX, std::stack<int> &Stack_splitY);
+		void Return(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY, int topX, int topY);
 		//TAREA
 
 	};

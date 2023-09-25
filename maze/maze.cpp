@@ -59,6 +59,7 @@ void Maze::shuffle_dir(){
 		dir[i] = aux;
 	 }
 }
+
 bool Maze::inRange(int i, int j){
 	return ((i >= 0) && (i< height) && (j >= 0) && (j< width));
 }
@@ -114,8 +115,10 @@ void Maze::print(){
 			if (grid[i][j] == 0) {
 				std::cout << EMPTY;
 			}
-			else {
+			else if (grid[i][j] == 1){
 				std::cout << WALL;
+			} else {
+				std::cout << "+";
 			}
 		}
 		std::cout << "|";
@@ -136,6 +139,54 @@ void Maze::print(){
 		}
 		return false;
 	}
-	//TAREA
 
+	void Maze::shuffle(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY){
+		shuffle_dir();
+
+		int topX = stackX.top();
+		int topY = stackY.top();
+		
+		if (dir[0] == NORTH && getBox(i - 1, j)) {
+			grid[i][j] = 2;
+			i--;
+		}
+		else if (dir[0] == SOUTH && getBox(i + 1, j)) {
+			grid[i][j] = 2;
+			i++;
+		}
+		else if (dir[0] == EAST && getBox(i, j + 1)) {
+			grid[i][j] = 2;
+			j++;
+		}
+		else if (dir[0] == WEST && getBox(i, j - 1)) {
+			grid[i][j] = 2;
+			j--;
+		} else 
+			shuffle(i, j, stackX, stackY);
+	}
+
+	int Maze::Split(int i, int j, std::stack<int> &Stack_splitX, std::stack<int> &Stack_splitY){
+		int counter = 0;
+		if (getBox(i + 1, j)) counter ++;
+		if (getBox(i - 1, j)) counter ++;
+		if (getBox(i, j + 1)) counter ++;
+		if (getBox(i, j - 1)) counter ++;
+
+		if (counter > 1){
+			Stack_splitX.push(i);
+			Stack_splitY.push(j);
+		}
+		return counter;
+	}
+
+	void Maze::Return(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY, int topX, int topY){
+		i = topX;
+		j = topY;
+
+		while(stackX.top() != topX && stackY.top() != topY){
+			stackX.pop();
+			stackY.pop();
+		}
+	}
+	//TAREA
 }
