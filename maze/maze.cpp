@@ -6,7 +6,7 @@
 namespace maze{
 
 const unsigned char Maze::WALL  = '@';
-const unsigned char Maze::EMPTY = '-';
+const unsigned char Maze::EMPTY = ' ';
 const int Maze::NORTH= 0;
 const int Maze::SOUTH= 1;
 const int Maze::EAST= 2;
@@ -117,9 +117,11 @@ void Maze::print(){
 			}
 			else if (grid[i][j] == 1){
 				std::cout << WALL;
-			} else {
-				std::cout << "+";
-			}
+			} else if (grid[i][j] == 2){
+				std::cout << "\x1b[46m\x1b[37m";
+				std::cout << " ";
+				std::cout << "\x1b[0m";
+			} else if (grid[i][j] == 3) std::cout << "\x1b[41m\x1b[37m" << " " << "\x1b[0m";
 		}
 		std::cout << "|";
 		std::cout << std::endl;
@@ -182,11 +184,15 @@ void Maze::print(){
 	void Maze::Return(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY, int topX, int topY){
 		i = topX;
 		j = topY;
-
 		while(stackX.top() != topX && stackY.top() != topY){
 			stackX.pop();
 			stackY.pop();
+			grid[stackX.top()][stackY.top()] = 0;
 		}
+	}
+
+	void Maze::setWall(int i, int j, int value){
+		grid[i][j] = value;
 	}
 	//TAREA
 }

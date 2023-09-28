@@ -31,6 +31,7 @@ namespace maze {
 		void shuffle(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY);
 		int Split(int i, int j, std::stack<int> &Stack_splitX, std::stack<int> &Stack_splitY);
 		void Return(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY, int topX, int topY);
+		void setWall(int i, int j, int value);
 		//TAREA
 
 	};
