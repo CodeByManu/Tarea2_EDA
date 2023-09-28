@@ -1,5 +1,6 @@
 #include "maze.hpp"
 #include <cstdlib>
+#include <unistd.h>
 #include <ctime>
 #include <iostream>
 
@@ -112,7 +113,8 @@ void Maze::print(){
 	for (int i = 0; i < height; i++){
 		std::cout << "|";
 		for (int j = 0; j < width; j++){
-			if (grid[i][j] == 0) {
+			if (grid[i][j] == 0 || grid[i][j] == 4) {
+				std::cout << "\x1b[0m";
 				std::cout << EMPTY;
 			}
 			else if (grid[i][j] == 1){
@@ -142,11 +144,11 @@ void Maze::print(){
 		return false;
 	}
 
-	void Maze::shuffle(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY){
+	void Maze::shuffle(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY){
 		shuffle_dir();
 
-		int topX = stackX.top();
-		int topY = stackY.top();
+		int topX = stackX.top() -> getData();
+		int topY = stackY.top() -> getData();
 		
 		if (dir[0] == NORTH && getBox(i - 1, j)) {
 			grid[i][j] = 2;
@@ -167,7 +169,7 @@ void Maze::print(){
 			shuffle(i, j, stackX, stackY);
 	}
 
-	int Maze::Split(int i, int j, std::stack<int> &Stack_splitX, std::stack<int> &Stack_splitY){
+	int Maze::Split(int i, int j, eda::Stack &Stack_splitX, eda::Stack &Stack_splitY){
 		int counter = 0;
 		if (getBox(i + 1, j)) counter ++;
 		if (getBox(i - 1, j)) counter ++;
@@ -181,13 +183,14 @@ void Maze::print(){
 		return counter;
 	}
 
-	void Maze::Return(int &i, int &j, std::stack<int> &stackX, std::stack<int> &stackY, int topX, int topY){
+	void Maze::Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int topX, int topY){
 		i = topX;
 		j = topY;
-		while(stackX.top() != topX && stackY.top() != topY){
+		// while(stackX.top() != topX && stackY.top() != topY){
+		while((stackX.top() -> getData() != topX && stackY.top() -> getData() != topY) || (stackX.top() -> getData() == topX && stackY.top() -> getData() != topY) || (stackX.top() -> getData() != topX && stackY.top() -> getData() == topY)){
 			stackX.pop();
 			stackY.pop();
-			grid[stackX.top()][stackY.top()] = 0;
+			grid[stackX.top() -> getData()][stackY.top() -> getData()] = 4;
 		}
 	}
 
