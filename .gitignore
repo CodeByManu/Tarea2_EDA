@@ -33,3 +33,6 @@
 
 *.pdf
 build
+.vscode
+*.code-workspace
+Makefile

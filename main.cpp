@@ -1,11 +1,11 @@
 #include <iostream>
 #include <stack>
 #include "maze/maze.hpp"
-#include "ADT's/stack.hpp"
+#include "ADTs/stack.hpp"
 
 using namespace std;
 
-int main(int nargs, char** vargs){
+int main(){
 	maze::Maze laberinto(21,21);
 	stack<int> stackX;
 	stack<int> stackY;

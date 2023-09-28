@@ -1,4 +1,4 @@
-#include "../ADT's/stack.hpp"
+#include "../ADTs/stack.hpp"
 #include <stack>
 
 namespace maze {
