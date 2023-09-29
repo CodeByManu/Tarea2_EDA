@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
-set(CMAKE_CXX_COMPILER "C:/msys64/mingw64/bin/g++.exe")
+set(CMAKE_CXX_COMPILER "/usr/bin/c++")
 
-set(CMAKE_MAKE_PROGRAM "MinGW Makefiles")
 # set the project name
 
 project(laberinto
@@ -14,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 #add_subdirectory(src)
 #add_subdirectory(tests)
 
-add_executable(test main.cpp maze/maze.cpp ADT's/linkedList.cpp ADT's/node.cpp ADT's/queue.cpp ADT's/stack.cpp)
+add_executable(test main.cpp maze/maze.cpp ADTs/linkedList.cpp ADTs/node.cpp ADTs/queue.cpp ADTs/stack.cpp)
 target_include_directories(test PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 # add the executable

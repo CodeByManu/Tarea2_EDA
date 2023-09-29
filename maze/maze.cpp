@@ -199,18 +199,23 @@ void Maze::setWall(int i, int j, int value){
 }
 //TAREA
 
-void Maze::solveStack() {
+void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	eda::Stack stackX;
 	eda::Stack stackY;
 	eda::Stack stack_splitX;
 	eda::Stack stack_splitY;
 	bool finished = false;
-	int inicioX = 0;
-	int inicioY = 0;
-	int i = inicioX;
-	int j = inicioY;
+	int i = i0;
+	int j = j0;
 	int iAux;
 	int jAux;
+	stack_splitX.push(i0);
+	stack_splitY.push(j0);
+
+	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
+		std::cout << "No hay camino posible..." << std::endl;
+		exit(0);
+	}
 
 	int possibilities;
 	while (!finished) {
@@ -231,8 +236,8 @@ void Maze::solveStack() {
 				jAux = j;
 			}
 
-			system("cls");
-			if(i == 20 && j == 20){
+			system("clear");	//cls para windows
+			if(i == i1 && j == j1){
 				finished = true;
 				setWall(i, j, 3);
 			}
