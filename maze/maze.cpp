@@ -165,6 +165,25 @@ void Maze::shuffle(int &i, int &j){
 		shuffle(i, j);
 }
 
+void Maze::PossiblePath(int i, int j, eda::Queue &qX, eda::Queue &qY){
+	if (getBox(i + 1, j)){
+		qX.push(i + 1);
+		qY.push(j);
+	}
+	if (getBox(i - 1, j)){
+		qX.push(i - 1);
+		qY.push(j);
+	}
+	if (getBox(i, j + 1)){
+		qX.push(i);
+		qY.push(j + 1);
+	}
+	if (getBox(i, j - 1)){
+		qX.push(i);
+		qY.push(j - 1);
+	}
+}
+
 void Maze::queueShuffle(int &i, int &j) {
 	shuffle_dir();
 
@@ -261,12 +280,12 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	bool finished = false;
 	int i = i0;
 	int j = j0;
-
-	// eda::Stack queue_splitX;
-	// eda::Stack queue_splitY;
 	int iAux;
 	int jAux;
 	int options;
+
+	// queueX.push(i);
+	// queueY.push(j);
 
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
@@ -274,84 +293,49 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	}
 
 	while (!finished) {
-		if (getBox(i,j)){
-
-
-			options = Split(i, j);
-			iAux = i; jAux = j;
-
-			if (options > 1) {
-				shuffle(i, j);
-				queueX.push(i);
-				queueY.push(j);
-				i = iAux; j = jAux;
-			}
-
+		// if (getBox(i,j)){
+			queueX.push(i);
+			queueY.push(j);
 			shuffle(i, j);
-			queueX.push(i); queueX.pop();
-			queueY.push(j); queueY.pop();
-
-			i = queueX.top()->getData();
-			j = queueY.top()->getData();
-
-			// options = Split(i, j);
-			// iAux = i;
-			// jAux = j;
-
-			// do {
-			// 	// verificar que se pueda avanzar (push)
-			// 	queueX.push(i);
-			// 	queueY.push(j);
-			// 	i = iAux;
-			// 	j = jAux;
-
-			// 	options = Split(i, j);
-			// 	if (options > 1) {
-			// 		shuffle(i, j);
-			// 		// options--;
-			// 		continue;
-			// 	}
-			// 	else if (options == 0) {
-					
-			// 	}
-
-				// i = queueX.top()->getData();
-				// j = queueY.top()->getData();
-				// shuffle(i, j);
-
-				// queueX.push(i);
-				// queueY.push(j);
-			// }
-			// while (options > 1);
-
-			// shuffle(i, j);
-			// while (options) {
-			// 	shuffle(i, j);
-			// 	// verificar que se pueda avanzar (push)
-			// 	queueX.push(i);
-			// 	queueY.push(j);
-			// 	setWall(i, j, 1);
-			// 	i = iAux;
-			// 	j = jAux;
-
-			// 	options--;
-			// 	if (options > 1) continue;
-
-			// 	i = queueX.top()->getData();
-			// 	j = queueY.top()->getData();
-			// 	shuffle(i, j);
-
-			// 	queueX.push(i);
-			// 	queueY.push(j);
-			// }
-
-			// system("clear");
-			system("cls");
-			if (i == i1 && j == j1) // o con i, j?
+			PossiblePath(i, j, queueX, queueY);
+			i = queueX.top() -> getData();
+			j = queueY.top() -> getData();
+			queueX.pop();
+			queueY.pop();
+			if (i1 == i && j1 == j){
 				finished = true;
 				setWall(i, j, 3);
+			}
+			system("clear");
 			print();
-		}
+
+			// options = Split(i, j);
+
+
+			// options = Split(i, j);
+			// iAux = i; jAux = j;
+
+			// if (options > 1) {
+			// 	shuffle(i, j);
+			// 	queueX.push(i);
+			// 	queueY.push(j);
+			// 	i = iAux; j = jAux;
+			// }
+
+			// shuffle(i, j);
+			// queueX.push(i); queueX.pop();
+			// queueY.push(j); queueY.pop();
+
+			// i = queueX.top()->getData();
+			// j = queueY.top()->getData();
+
+			// system("clear");
+			// // system("cls");
+			// if (i == i1 && j == j1) // o con i, j?
+			// 	finished = true;
+			// 	setWall(i, j, 3);
+			// print();
+		// }
 	}
 
 }

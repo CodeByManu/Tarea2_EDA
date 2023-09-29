@@ -30,7 +30,8 @@ namespace maze {
 		bool getBox(int i, int j);
 		void shuffle(int &i, int &j);
 		void queueShuffle(int &i, int &j);
-		int Split(int i, int j/* , eda::Stack &Stack_splitX, eda::Stack &Stack_splitY */);
+		int Split(int i, int j);
+		void PossiblePath(int, int, eda::Queue &, eda::Queue &);
 		void Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int topX, int topY);
 		void setWall(int i, int j, int value);
 		void solveStack(int i0, int j0, int i1, int j1);
