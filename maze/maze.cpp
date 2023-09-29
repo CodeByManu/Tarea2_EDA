@@ -117,13 +117,12 @@ void Maze::print(){
 				std::cout << "\x1b[0m";
 				std::cout << EMPTY;
 			}
-			else if (grid[i][j] == 1){
+			else if (grid[i][j] == 1)
 				std::cout << WALL;
-			} else if (grid[i][j] == 2){
-				std::cout << "\x1b[46m\x1b[37m";
-				std::cout << " ";
-				std::cout << "\x1b[0m";
-			} else if (grid[i][j] == 3) std::cout << "\x1b[41m\x1b[37m" << " " << "\x1b[0m";
+			else if (grid[i][j] == 2)
+				std::cout << "\x1b[46m\x1b[37m" << " " << "\x1b[0m";
+			else if (grid[i][j] == 3)
+				std::cout << "\x1b[41m\x1b[37m" << " " << "\x1b[0m";
 		}
 		std::cout << "|";
 		std::cout << std::endl;
@@ -144,11 +143,8 @@ bool Maze::getBox(int i, int j){	//Retorna true si la casilla esta vacia, o sea,
 	return false;
 }
 
-void Maze::shuffle(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY){
+void Maze::shuffle(int &i, int &j){
 	shuffle_dir();
-
-	int topX = stackX.top() -> getData();
-	int topY = stackY.top() -> getData();
 	
 	if (dir[0] == NORTH && getBox(i - 1, j)) {
 		grid[i][j] = 2;
@@ -166,27 +162,34 @@ void Maze::shuffle(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY){
 		grid[i][j] = 2;
 		j--;
 	} else 
-		shuffle(i, j, stackX, stackY);
+		shuffle(i, j);
 }
 
-int Maze::Split(int i, int j, eda::Stack &Stack_splitX, eda::Stack &Stack_splitY){
+void Maze::queueShuffle(int &i, int &j) {
+	shuffle_dir();
+
+
+}
+
+int Maze::Split(int i, int j/* , eda::Stack &stack_splitX, eda::Stack &stack_splitY */){
 	int counter = 0;
 	if (getBox(i + 1, j)) counter ++;
 	if (getBox(i - 1, j)) counter ++;
 	if (getBox(i, j + 1)) counter ++;
 	if (getBox(i, j - 1)) counter ++;
 
-	if (counter > 1){
-		Stack_splitX.push(i);
-		Stack_splitY.push(j);
-	}
+	// if (counter > 1){
+	// 	stack_splitX.push(i);
+	// 	stack_splitY.push(j);
+	// }
 	return counter;
 }
 
+// ESTETICA
 void Maze::Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int topX, int topY){
 	i = topX;
 	j = topY;
-	// while(stackX.top() != topX && stackY.top() != topY){
+	
 	while((stackX.top() -> getData() != topX && stackY.top() -> getData() != topY) || (stackX.top() -> getData() == topX && stackY.top() -> getData() != topY) || (stackX.top() -> getData() != topX && stackY.top() -> getData() == topY)){
 		stackX.pop();
 		stackY.pop();
@@ -197,7 +200,6 @@ void Maze::Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int to
 void Maze::setWall(int i, int j, int value){
 	grid[i][j] = value;
 }
-//TAREA
 
 void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	eda::Stack stackX;
@@ -209,86 +211,150 @@ void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	int j = j0;
 	int iAux;
 	int jAux;
+	int options;
+
 	stack_splitX.push(i0);
 	stack_splitY.push(j0);
+
+	// NECESARIO?
+	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
+		std::cout << "No hay camino posible..." << std::endl;
+		exit(0);
+	}
+
+	while (!finished) {
+		if (getBox(i,j)){
+			stackX.push(i);
+			stackY.push(j);
+			options = Split(i, j);
+
+			if (options == 0) {
+				Return(i, j, stackX, stackY, stack_splitX.top() -> getData(), stack_splitY.top() -> getData());
+				stack_splitX.pop();
+				stack_splitY.pop();
+				setWall(iAux, jAux, 1);
+			}
+
+			if (options > 1) {
+				iAux = i;
+				jAux = j;
+				stack_splitX.push(i);
+				stack_splitY.push(j);
+			}
+
+			shuffle(i, j);
+
+			// system("clear");
+			system("cls");
+			if(i == i1 && j == j1) {
+				finished = true;
+				setWall(i, j, 3);
+			}
+			print();
+		}
+	}
+}
+
+void Maze::solveQueue(int i0, int j0, int i1, int j1) {
+	eda::Queue queueX;
+	eda::Queue queueY;
+	bool finished = false;
+	int i = i0;
+	int j = j0;
+
+	// eda::Stack queue_splitX;
+	// eda::Stack queue_splitY;
+	int iAux;
+	int jAux;
+	int options;
 
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
 		exit(0);
 	}
 
-	int possibilities;
 	while (!finished) {
 		if (getBox(i,j)){
-			stackX.push(i);
-			stackY.push(j);
-			possibilities = Split(i, j, stack_splitX, stack_splitY);
-			if (possibilities == 0) {
-				Return(i, j, stackX, stackY, stack_splitX.top() -> getData(), stack_splitY.top() -> getData());
-				stack_splitX.pop();
-				stack_splitY.pop();
-				setWall(iAux, jAux, 1);
-			}
-			shuffle(i, j, stackX, stackY);
 
-			if (possibilities > 1) {
-				iAux = i;
-				jAux = j;
+
+			options = Split(i, j);
+			iAux = i; jAux = j;
+
+			if (options > 1) {
+				shuffle(i, j);
+				queueX.push(i);
+				queueY.push(j);
+				i = iAux; j = jAux;
 			}
 
-			system("clear");	//cls para windows
-			if(i == i1 && j == j1){
+			shuffle(i, j);
+			queueX.push(i); queueX.pop();
+			queueY.push(j); queueY.pop();
+
+			i = queueX.top()->getData();
+			j = queueY.top()->getData();
+
+			// options = Split(i, j);
+			// iAux = i;
+			// jAux = j;
+
+			// do {
+			// 	// verificar que se pueda avanzar (push)
+			// 	queueX.push(i);
+			// 	queueY.push(j);
+			// 	i = iAux;
+			// 	j = jAux;
+
+			// 	options = Split(i, j);
+			// 	if (options > 1) {
+			// 		shuffle(i, j);
+			// 		// options--;
+			// 		continue;
+			// 	}
+			// 	else if (options == 0) {
+					
+			// 	}
+
+				// i = queueX.top()->getData();
+				// j = queueY.top()->getData();
+				// shuffle(i, j);
+
+				// queueX.push(i);
+				// queueY.push(j);
+			// }
+			// while (options > 1);
+
+			// shuffle(i, j);
+			// while (options) {
+			// 	shuffle(i, j);
+			// 	// verificar que se pueda avanzar (push)
+			// 	queueX.push(i);
+			// 	queueY.push(j);
+			// 	setWall(i, j, 1);
+			// 	i = iAux;
+			// 	j = jAux;
+
+			// 	options--;
+			// 	if (options > 1) continue;
+
+			// 	i = queueX.top()->getData();
+			// 	j = queueY.top()->getData();
+			// 	shuffle(i, j);
+
+			// 	queueX.push(i);
+			// 	queueY.push(j);
+			// }
+
+			// system("clear");
+			system("cls");
+			if (i == i1 && j == j1) // o con i, j?
 				finished = true;
 				setWall(i, j, 3);
-			}
 			print();
-			// usleep(50000);
 		}
 	}
+
 }
-
-// void Maze::solveQueue() {
-// 	eda::Queue stackX;
-// 	eda::Queue stackY;
-// 	eda::Queue stack_splitX;
-// 	eda::Queue stack_splitY;
-// 	bool finished = false;
-// 	int inicioX = 0;
-// 	int inicioY = 0;
-// 	int i = inicioX;
-// 	int j = inicioY;
-// 	int iAux;
-// 	int jAux;
-
-// 	int possibilities;
-// 	while (!finished) {
-// 		if (getBox(i,j)){
-// 			stackX.push(i);
-// 			stackY.push(j);
-// 			possibilities = Split(i, j, stack_splitX, stack_splitY);
-// 			if (possibilities == 0) {
-// 				Return(i, j, stackX, stackY, stack_splitX.top() -> getData(), stack_splitY.top() -> getData());
-// 				stack_splitX.pop();
-// 				stack_splitY.pop();
-// 				setWall(iAux, jAux, 1);
-// 			}
-// 			shuffle(i, j, stackX, stackY);
-
-// 			if (possibilities > 1) {
-// 				iAux = i;
-// 				jAux = j;
-// 			}
-
-// 			system("cls");
-// 			if(i == 20 && j == 20){
-// 				finished = true;
-// 				setWall(i, j, 3);
-// 			}
-// 			print();
-// 			// usleep(50000);
-// 		}
-// 	}
-
-// }
+//TAREA
 
 }

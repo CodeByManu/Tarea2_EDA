@@ -1,5 +1,5 @@
 #include "../ADTs/stack.hpp"
-#include <stack>
+#include "../ADTs/queue.hpp"
 
 namespace maze {
 	typedef unsigned char uchar;
@@ -28,12 +28,13 @@ namespace maze {
 		void print();
 		//TAREA
 		bool getBox(int i, int j);
-		void shuffle(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY);
-		int Split(int i, int j, eda::Stack &Stack_splitX, eda::Stack &Stack_splitY);
+		void shuffle(int &i, int &j);
+		void queueShuffle(int &i, int &j);
+		int Split(int i, int j/* , eda::Stack &Stack_splitX, eda::Stack &Stack_splitY */);
 		void Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int topX, int topY);
 		void setWall(int i, int j, int value);
-		void solveStack(int, int, int, int);
-		void solveQueue();
+		void solveStack(int i0, int j0, int i1, int j1);
+		void solveQueue(int i0, int j0, int i1, int j1);
 		//TAREA
 	};
 }
