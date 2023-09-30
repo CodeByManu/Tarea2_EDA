@@ -182,6 +182,7 @@ void Maze::PossiblePath(int i, int j, eda::Queue &qX, eda::Queue &qY){
 		qX.push(i);
 		qY.push(j - 1);
 	}
+	grid[i][j] = 2;
 }
 
 void Maze::queueShuffle(int &i, int &j) {
@@ -284,60 +285,28 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	int jAux;
 	int options;
 
-	// queueX.push(i);
-	// queueY.push(j);
-
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
 		exit(0);
 	}
 
 	while (!finished) {
-		// if (getBox(i,j)){
-			queueX.push(i);
-			queueY.push(j);
-			shuffle(i, j);
-			PossiblePath(i, j, queueX, queueY);
-			i = queueX.top() -> getData();
-			j = queueY.top() -> getData();
-			queueX.pop();
-			queueY.pop();
-			if (i1 == i && j1 == j){
-				finished = true;
-				setWall(i, j, 3);
-			}
-			system("clear");
-			print();
-
-			// options = Split(i, j);
-
-
-			// options = Split(i, j);
-			// iAux = i; jAux = j;
-
-			// if (options > 1) {
-			// 	shuffle(i, j);
-			// 	queueX.push(i);
-			// 	queueY.push(j);
-			// 	i = iAux; j = jAux;
-			// }
-
-			// shuffle(i, j);
-			// queueX.push(i); queueX.pop();
-			// queueY.push(j); queueY.pop();
-
-			// i = queueX.top()->getData();
-			// j = queueY.top()->getData();
-
-			// system("clear");
-			// // system("cls");
-			// if (i == i1 && j == j1) // o con i, j?
-			// 	finished = true;
-			// 	setWall(i, j, 3);
-			// print();
-		// }
+		queueX.push(i);
+		queueY.push(j);
+		iAux = i;
+		jAux = j;
+		// shuffle(i, j);
+		PossiblePath(i, j, queueX, queueY);
+		i = queueX.top() -> getData();
+		j = queueY.top() -> getData();
+		queueX.pop();
+		queueY.pop();
+		if (i1 == i && j1 == j){
+			finished = true;
+			setWall(i, j, 3);
+		}
+		print();
 	}
-
 }
 //TAREA
 
