@@ -27,14 +27,20 @@ namespace maze {
 		bool inRange(int i, int j);
 		void print();
 		//TAREA
+		// static int XMIN;
+		// static int YMIN;
+		static int XMAX;
+		static int YMAX;
+		int solLength = 0;
+		struct cell;
+		int** resize(int** &array, int &n, int expand);
 		bool getBox(int i, int j);
 		void shuffle(int &i, int &j);
-		void queueShuffle(int &i, int &j);
 		int Split(int i, int j);
 		void PossiblePath(int, int, eda::Queue &, eda::Queue &);
 		void Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int topX, int topY);
 		void setWall(int i, int j, int value);
-		void solveStack(int i0, int j0, int i1, int j1);
+		int** solveStack(int i0, int j0, int i1, int j1);
 		void solveQueue(int i0, int j0, int i1, int j1);
 		//TAREA
 	};

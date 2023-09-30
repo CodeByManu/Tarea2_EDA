@@ -8,8 +8,12 @@ using namespace std;
 
 int main(){
 	maze::Maze maze(21,21);
+	// int xmax = maze.XMAX;
+	// int ymax = maze.YMAX;
+
 	int init [4] = {0, 0, 20, 20};
 	string coord[4] = {"x0", "x1", "y0", "y1"};
+	int** arr = new int*[21];
 
 	// maze.print();
 	// AGREGAR LOOP PARA VERIFICAR COORDENADA CORRECTA (?)
@@ -20,8 +24,15 @@ int main(){
 	// }
 	// cout << endl;
 
-	// maze.solveStack(0,0,20,20);
-	maze.solveQueue(0,0,20,20);
+	arr = maze.solveStack(0,0,20,20);
+	cout << "[test main]" << endl;
+	for (int index = 0; index < maze.solLength; index++) {
+		cout << arr[index][0] << ", " << arr[index][1] << endl;
+		index++;
+	}
+	for (int i = 0; i < maze::Maze::YMAX; i ++) delete arr[i];
+	delete[] arr;
+	// maze.solveQueue(0,0,20,20);
 
 	return 0;
 }

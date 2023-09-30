@@ -12,6 +12,18 @@ const int Maze::NORTH= 0;
 const int Maze::SOUTH= 1;
 const int Maze::EAST= 2;
 const int Maze::WEST= 3;
+// TAREA
+int Maze::XMAX = 21;
+int Maze::YMAX = 21;
+// TAREA
+
+struct Maze::cell {
+	int x;
+	int y;
+
+	cell (int xcord, int ycord) : x(xcord), y(ycord) {}
+	cell () : x(), y() {}
+};
 
 Maze::Maze(int h, int w):
 		height(h),
@@ -23,6 +35,10 @@ Maze::Maze(int h, int w):
 	dir[3] = WEST;
 	std::srand(time(0));
 	generate_maze(h, w);
+	// TAREA
+	XMAX = height;
+	YMAX = width;
+	// TAREA
 }
 
 void Maze::reset_maze(int h, int w){
@@ -188,27 +204,16 @@ void Maze::PossiblePath(int i, int j, eda::Queue &qX, eda::Queue &qY){
 	grid[i][j] = 2;
 }
 
-void Maze::queueShuffle(int &i, int &j) {
-	shuffle_dir();
-
-
-}
-
-int Maze::Split(int i, int j/* , eda::Stack &stack_splitX, eda::Stack &stack_splitY */){
+int Maze::Split(int i, int j){
 	int counter = 0;
 	if (getBox(i + 1, j)) counter ++;
 	if (getBox(i - 1, j)) counter ++;
 	if (getBox(i, j + 1)) counter ++;
 	if (getBox(i, j - 1)) counter ++;
 
-	// if (counter > 1){
-	// 	stack_splitX.push(i);
-	// 	stack_splitY.push(j);
-	// }
 	return counter;
 }
 
-// ESTETICA
 void Maze::Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int topX, int topY){
 	i = topX;
 	j = topY;
@@ -225,7 +230,17 @@ void Maze::setWall(int i, int j, int value){
 	grid[i][j] = value;
 }
 
-void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
+int** Maze::resize(int** &array, int &n, int expand) {
+	int** arr = new int*[n*expand];
+	for (int i = 0; i < n; i++) {
+		arr[i] = array[i];
+	}
+	delete[] array;
+	n *= expand;
+	return arr;
+}
+
+int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	eda::Stack stackX;
 	eda::Stack stackY;
 	eda::Stack stack_splitX;
@@ -236,6 +251,7 @@ void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	int iAux;
 	int jAux;
 	int options;
+	int** arr = new int*[YMAX];
 
 	stack_splitX.push(i0);
 	stack_splitY.push(j0);
@@ -268,8 +284,8 @@ void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 
 			shuffle(i, j);
 
-			system("clear");
-			// system("cls");
+			// system("clear");
+			system("cls");
 			if(i == i1 && j == j1) {
 				finished = true;
 				setWall(i, j, 3);
@@ -277,41 +293,24 @@ void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 			print();
 		}
 	}
+
+	// NO ES LA MEJOR MANERA PERO POR MIENTRAS
+	// NOSE SI SE PUEDEN USAR VECTORES, POR MIENTRAS HACIENDO RESIZE A ARRAY
+	while(!stackX.isEmpty()) {
+		std::cout << "[test maze] " << solLength << std::endl;
+		int xy[2] = {stackX.top()->getData(), stackY.top()->getData()};
+		arr[solLength] = new int[2];
+		arr[solLength][0] = xy[0];
+		arr[solLength][1] = xy[1];
+		stackX.pop();
+		stackY.pop();
+		solLength++;
+		if (solLength == YMAX) {
+			arr = resize(arr, YMAX, 2);
+		}
+	}
+	return arr;
 }
-
-// void Maze::solveQueue(int i0, int j0, int i1, int j1) {
-// 	eda::Queue queueX;
-// 	eda::Queue queueY;
-// 	bool finished = false;
-// 	int i = i0;
-// 	int j = j0;
-// 	int iAux;
-// 	int jAux;
-// 	int options;
-
-// 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
-// 		std::cout << "No hay camino posible..." << std::endl;
-// 		exit(0);
-// 	}
-
-// 	while (!finished) {
-// 		queueX.push(i);
-// 		queueY.push(j);
-// 		iAux = i;
-// 		jAux = j;
-// 		// shuffle(i, j);
-// 		PossiblePath(i, j, queueX, queueY);
-// 		i = queueX.top() -> getData();
-// 		j = queueY.top() -> getData();
-// 		queueX.pop();
-// 		queueY.pop();
-// 		if (i1 == i && j1 == j){
-// 			finished = true;
-// 			setWall(i, j, 3);
-// 		}
-// 		print();
-// 	}
-// }
 
 void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	eda::Queue queueX;
@@ -322,6 +321,7 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	int iAux;
 	int jAux;
 	int options;
+	int** arr = new int*[YMAX];
 
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
@@ -353,14 +353,27 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 		i = queueX.top()->getData();
 		j = queueY.top()->getData();
 
-		system("clear");
-		// system("cls");
+		// system("clear");
+		system("cls");
 		if (i == i1 && j == j1) {
 			finished = true;
 			setWall(i, j, 3);
 		}
 		print();
 		// usleep(50000);
+	}
+	while(!queueX.isEmpty()) {
+		std::cout << "[test maze] " << solLength << std::endl;
+		int xy[2] = {queueX.top()->getData(), queueY.top()->getData()};
+		arr[solLength] = new int[2];
+		arr[solLength][0] = xy[0];
+		arr[solLength][1] = xy[1];
+		queueX.pop();
+		queueY.pop();
+		solLength++;
+		if (solLength == YMAX) {
+			arr = resize(arr, YMAX, 2);
+		}
 	}
 
 }
