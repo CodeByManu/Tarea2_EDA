@@ -15,7 +15,7 @@ int main(){
 	string coord[4] = {"x0", "x1", "y0", "y1"};
 	int** arr = new int*[21];
 
-	// maze.print();
+	maze.print();
 	// AGREGAR LOOP PARA VERIFICAR COORDENADA CORRECTA (?)
 	// cout << endl << "Ingrese coordenadas de partida (x0, y0), y de destino (x1, y1)" << endl;
 	// for (int i = 0; i < 4; i++) {
@@ -24,15 +24,16 @@ int main(){
 	// }
 	// cout << endl;
 
-	arr = maze.solveStack(0,0,20,20);
-	cout << "[test main]" << endl;
+	// arr = maze.solveStack(0,0,20,20);
+	arr = maze.solveQueue(0,0,20,20);
+	// maze.print();
+	// cout << "[test main]" << endl;
 	for (int index = 0; index < maze.solLength; index++) {
 		cout << arr[index][0] << ", " << arr[index][1] << endl;
 		index++;
 	}
 	for (int i = 0; i < maze::Maze::YMAX; i ++) delete arr[i];
 	delete[] arr;
-	// maze.solveQueue(0,0,20,20);
 
 	return 0;
 }

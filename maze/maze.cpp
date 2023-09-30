@@ -184,6 +184,7 @@ void Maze::shuffle(int &i, int &j){
 		shuffle(i, j);
 }
 
+// BORRAR (?)
 void Maze::PossiblePath(int i, int j, eda::Queue &qX, eda::Queue &qY){
 	if (getBox(i + 1, j)){
 		qX.push(i + 1);
@@ -285,19 +286,19 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 			shuffle(i, j);
 
 			// system("clear");
-			system("cls");
+			// system("cls");
 			if(i == i1 && j == j1) {
 				finished = true;
 				setWall(i, j, 3);
 			}
-			print();
+			// print();
 		}
 	}
 
 	// NO ES LA MEJOR MANERA PERO POR MIENTRAS
 	// NOSE SI SE PUEDEN USAR VECTORES, POR MIENTRAS HACIENDO RESIZE A ARRAY
 	while(!stackX.isEmpty()) {
-		std::cout << "[test maze] " << solLength << std::endl;
+		// std::cout << "[test maze] " << solLength << std::endl;
 		int xy[2] = {stackX.top()->getData(), stackY.top()->getData()};
 		arr[solLength] = new int[2];
 		arr[solLength][0] = xy[0];
@@ -312,7 +313,7 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	return arr;
 }
 
-void Maze::solveQueue(int i0, int j0, int i1, int j1) {
+int** Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	eda::Queue queueX;
 	eda::Queue queueY;
 	bool finished = false;
@@ -363,7 +364,7 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 		// usleep(50000);
 	}
 	while(!queueX.isEmpty()) {
-		std::cout << "[test maze] " << solLength << std::endl;
+		// std::cout << "[test maze] " << solLength << std::endl;
 		int xy[2] = {queueX.top()->getData(), queueY.top()->getData()};
 		arr[solLength] = new int[2];
 		arr[solLength][0] = xy[0];
@@ -375,7 +376,7 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 			arr = resize(arr, YMAX, 2);
 		}
 	}
-
+	return arr;
 }
 //TAREA
 

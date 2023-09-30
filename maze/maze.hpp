@@ -41,7 +41,7 @@ namespace maze {
 		void Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int topX, int topY);
 		void setWall(int i, int j, int value);
 		int** solveStack(int i0, int j0, int i1, int j1);
-		void solveQueue(int i0, int j0, int i1, int j1);
+		int** solveQueue(int i0, int j0, int i1, int j1);
 		//TAREA
 	};
 }
