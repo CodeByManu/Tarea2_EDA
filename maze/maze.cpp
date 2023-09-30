@@ -133,7 +133,7 @@ void Maze::print(){
 				std::cout << "\x1b[0m";
 				std::cout << EMPTY;
 			}
-			else if (grid[i][j] == 1)
+			else if (grid[i][j] == 1 || grid[i][j] == 5)
 				std::cout << WALL;
 			else if (grid[i][j] == 2)
 				std::cout << "\x1b[46m\x1b[37m" << " " << "\x1b[0m";
@@ -241,6 +241,15 @@ int** Maze::resize(int** &array, int &n, int expand) {
 	return arr;
 }
 
+void Maze::clean() {
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			if ((grid[i][j] == 2) || (grid[i][j] == 3) || (grid[i][j] == 4)) grid[i][j] = 0;
+			else if (grid[i][j] == 5) grid[i][j] = 1;
+		}
+	}
+}
+
 int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	eda::Stack stackX;
 	eda::Stack stackY;
@@ -273,7 +282,7 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 				Return(i, j, stackX, stackY, stack_splitX.top() -> getData(), stack_splitY.top() -> getData());
 				stack_splitX.pop();
 				stack_splitY.pop();
-				setWall(iAux, jAux, 1);
+				setWall(iAux, jAux, 5);
 			}
 
 			if (options > 1) {
@@ -285,13 +294,14 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 
 			shuffle(i, j);
 
-			// system("clear");
-			// system("cls");
 			if(i == i1 && j == j1) {
 				finished = true;
 				setWall(i, j, 3);
 			}
-			// print();
+			system("clear");
+			// system("cls");
+			print();
+			usleep(1000);
 		}
 	}
 
@@ -334,8 +344,9 @@ int** Maze::solveQueue(int i0, int j0, int i1, int j1) {
 
 	while (!finished) {
 		options = Split(i, j);
-		iAux = i; jAux = j;
+		
 		if (options > 1) {
+			iAux = i; jAux = j;
 			queueX.push(i);
 			queueY.push(j);
 			shuffle(i, j);
@@ -354,14 +365,14 @@ int** Maze::solveQueue(int i0, int j0, int i1, int j1) {
 		i = queueX.top()->getData();
 		j = queueY.top()->getData();
 
-		// system("clear");
-		system("cls");
+		// system("cls");
 		if (i == i1 && j == j1) {
 			finished = true;
 			setWall(i, j, 3);
 		}
+		system("clear");
 		print();
-		// usleep(50000);
+		usleep(1000);
 	}
 	while(!queueX.isEmpty()) {
 		// std::cout << "[test maze] " << solLength << std::endl;

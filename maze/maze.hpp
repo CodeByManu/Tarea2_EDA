@@ -33,6 +33,7 @@ namespace maze {
 		static int YMAX;
 		int solLength = 0;
 		struct cell;
+		void clean();
 		int** resize(int** &array, int &n, int expand);
 		bool getBox(int i, int j);
 		void shuffle(int &i, int &j);
