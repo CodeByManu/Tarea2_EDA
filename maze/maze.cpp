@@ -146,6 +146,9 @@ bool Maze::getBox(int i, int j){	//Retorna true si la casilla esta vacia, o sea,
 void Maze::shuffle(int &i, int &j){
 	shuffle_dir();
 	
+	if ((!getBox(i - 1, j) && !getBox(i + 1, j) && !getBox(i, j - 1) && !getBox(i, j + 1))) {
+		return;
+	}
 	if (dir[0] == NORTH && getBox(i - 1, j)) {
 		grid[i][j] = 2;
 		i--;
@@ -210,7 +213,8 @@ void Maze::Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int to
 	i = topX;
 	j = topY;
 	
-	while((stackX.top() -> getData() != topX && stackY.top() -> getData() != topY) || (stackX.top() -> getData() == topX && stackY.top() -> getData() != topY) || (stackX.top() -> getData() != topX && stackY.top() -> getData() == topY)){
+	
+	while(stackX.top() -> getData() != topX || stackY.top() -> getData() != topY) {
 		stackX.pop();
 		stackY.pop();
 		grid[stackX.top() -> getData()][stackY.top() -> getData()] = 4;
@@ -275,9 +279,45 @@ void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	}
 }
 
+// void Maze::solveQueue(int i0, int j0, int i1, int j1) {
+// 	eda::Queue queueX;
+// 	eda::Queue queueY;
+// 	bool finished = false;
+// 	int i = i0;
+// 	int j = j0;
+// 	int iAux;
+// 	int jAux;
+// 	int options;
+
+// 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
+// 		std::cout << "No hay camino posible..." << std::endl;
+// 		exit(0);
+// 	}
+
+// 	while (!finished) {
+// 		queueX.push(i);
+// 		queueY.push(j);
+// 		iAux = i;
+// 		jAux = j;
+// 		// shuffle(i, j);
+// 		PossiblePath(i, j, queueX, queueY);
+// 		i = queueX.top() -> getData();
+// 		j = queueY.top() -> getData();
+// 		queueX.pop();
+// 		queueY.pop();
+// 		if (i1 == i && j1 == j){
+// 			finished = true;
+// 			setWall(i, j, 3);
+// 		}
+// 		print();
+// 	}
+// }
+
 void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	eda::Queue queueX;
 	eda::Queue queueY;
+	eda::Queue queue_splitX;
+	eda::Queue queue_splitY;
 	bool finished = false;
 	int i = i0;
 	int j = j0;
@@ -285,28 +325,64 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	int jAux;
 	int options;
 
+	int is;
+	int js;
+
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
 		exit(0);
 	}
 
+	queueX.push(i);
+	queueY.push(j);
+
 	while (!finished) {
+		options = Split(i, j);
+		iAux = i; jAux = j;
+
+		// if (options == 0) {
+			// setWall(is, js, 1);
+			// i = queue_splitX.top()->getData();
+			// j = queue_splitY.top()->getData();
+			// i = is;
+			// j = js;
+			// queueX.pop();
+			// queueY.pop();
+		// }
+
+		if (options > 1) {
+			// queue_splitX.push(i);
+			// queue_splitY.push(j);
+
+			// setWall(i, j, 1);
+			shuffle(i, j);
+			// is = i;
+			// js = j;
+			queueX.push(i);
+			queueY.push(j);
+			i = iAux; j = jAux;
+		}
+
+		shuffle(i, j);
+
 		queueX.push(i);
 		queueY.push(j);
-		iAux = i;
-		jAux = j;
-		// shuffle(i, j);
-		PossiblePath(i, j, queueX, queueY);
-		i = queueX.top() -> getData();
-		j = queueY.top() -> getData();
+
 		queueX.pop();
 		queueY.pop();
-		if (i1 == i && j1 == j){
+
+		i = queueX.top()->getData();
+		j = queueY.top()->getData();
+
+		system("cls");
+		if (i == i1 && j == j1) {
 			finished = true;
 			setWall(i, j, 3);
 		}
 		print();
+		// usleep(50000);
 	}
+
 }
 //TAREA
 
