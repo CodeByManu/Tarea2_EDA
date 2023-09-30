@@ -268,8 +268,8 @@ void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 
 			shuffle(i, j);
 
-			// system("clear");
-			system("cls");
+			system("clear");
+			// system("cls");
 			if(i == i1 && j == j1) {
 				finished = true;
 				setWall(i, j, 3);
@@ -316,17 +316,12 @@ void Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	eda::Queue queueX;
 	eda::Queue queueY;
-	eda::Queue queue_splitX;
-	eda::Queue queue_splitY;
 	bool finished = false;
 	int i = i0;
 	int j = j0;
 	int iAux;
 	int jAux;
 	int options;
-
-	int is;
-	int js;
 
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
@@ -339,30 +334,14 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	while (!finished) {
 		options = Split(i, j);
 		iAux = i; jAux = j;
-
-		// if (options == 0) {
-			// setWall(is, js, 1);
-			// i = queue_splitX.top()->getData();
-			// j = queue_splitY.top()->getData();
-			// i = is;
-			// j = js;
-			// queueX.pop();
-			// queueY.pop();
-		// }
-
 		if (options > 1) {
-			// queue_splitX.push(i);
-			// queue_splitY.push(j);
-
-			// setWall(i, j, 1);
+			queueX.push(i);
+			queueY.push(j);
 			shuffle(i, j);
-			// is = i;
-			// js = j;
 			queueX.push(i);
 			queueY.push(j);
 			i = iAux; j = jAux;
 		}
-
 		shuffle(i, j);
 
 		queueX.push(i);
@@ -374,7 +353,8 @@ void Maze::solveQueue(int i0, int j0, int i1, int j1) {
 		i = queueX.top()->getData();
 		j = queueY.top()->getData();
 
-		system("cls");
+		system("clear");
+		// system("cls");
 		if (i == i1 && j == j1) {
 			finished = true;
 			setWall(i, j, 3);
