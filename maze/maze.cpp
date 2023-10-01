@@ -298,10 +298,10 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 				finished = true;
 				setWall(i, j, 3);
 			}
-			system("clear");
+			// system("clear");
 			// system("cls");
-			print();
-			usleep(1000);
+			// print();
+			// usleep(1000);
 		}
 	}
 
@@ -370,9 +370,9 @@ int** Maze::solveQueue(int i0, int j0, int i1, int j1) {
 			finished = true;
 			setWall(i, j, 3);
 		}
-		system("clear");
-		print();
-		usleep(1000);
+		// system("clear");
+		// print();
+		// usleep(1000);
 	}
 	while(!queueX.isEmpty()) {
 		// std::cout << "[test maze] " << solLength << std::endl;
