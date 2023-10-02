@@ -27,11 +27,8 @@ namespace maze {
 		bool inRange(int i, int j);
 		void print();
 		//TAREA
-		// static int XMIN;
-		// static int YMIN;
 		static int XMAX;
 		static int YMAX;
-		// static int** arr1;
 		int stackSolLength = 0;
 		int queueSolLength = 0;
 		struct cell;
@@ -40,7 +37,6 @@ namespace maze {
 		bool getBox(int i, int j);
 		void shuffle(int &i, int &j);
 		int Split(int i, int j);
-		void PossiblePath(int, int, eda::Queue &, eda::Queue &);
 		void Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int topX, int topY);
 		void setWall(int i, int j, int value);
 		int** solveStack(int i0, int j0, int i1, int j1);

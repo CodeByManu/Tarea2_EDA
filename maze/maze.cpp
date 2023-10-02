@@ -15,7 +15,6 @@ const int Maze::WEST= 3;
 // TAREA
 int Maze::XMAX = 21;
 int Maze::YMAX = 21;
-// static int** arr1 = new int*[YMAX];
 // TAREA
 
 struct Maze::cell {
@@ -90,9 +89,7 @@ void Maze::visit(int i, int j){
 	int j_next = 0;
 	grid[i][j] = 0;
 	shuffle_dir();
-	//std::cout << dir[0] << " " << dir[1] << " " << dir[2] << " "<< dir[3] << std::endl;
 	for(int k = 0; k <  4; k++){
-		//std::cout << dir[k] << std::endl;
 		if (dir[k] == NORTH){
 			dy = -1;
 			dx = 0;
@@ -153,7 +150,7 @@ void Maze::print(){
 }
 
 //TAREA
-bool Maze::getBox(int i, int j){	//Retorna true si la casilla esta vacia, o sea, es accedible
+bool Maze::getBox(int i, int j){	//Retorna true si la casilla esta vacia
 	if (inRange(i, j)){
 		return grid[i][j] == 0;
 	}
@@ -183,27 +180,6 @@ void Maze::shuffle(int &i, int &j){
 		j--;
 	} else 
 		shuffle(i, j);
-}
-
-// BORRAR (?)
-void Maze::PossiblePath(int i, int j, eda::Queue &qX, eda::Queue &qY){
-	if (getBox(i + 1, j)){
-		qX.push(i + 1);
-		qY.push(j);
-	}
-	if (getBox(i - 1, j)){
-		qX.push(i - 1);
-		qY.push(j);
-	}
-	if (getBox(i, j + 1)){
-		qX.push(i);
-		qY.push(j + 1);
-	}
-	if (getBox(i, j - 1)){
-		qX.push(i);
-		qY.push(j - 1);
-	}
-	grid[i][j] = 2;
 }
 
 int Maze::Split(int i, int j){
@@ -250,7 +226,7 @@ void Maze::clean() {
 	}
 }
 
-int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
+int** Maze::solveStack(int i0, int j0, int i1, int j1) { //0 es incio, 1 es fin
 	eda::Stack stackX;
 	eda::Stack stackY;
 	eda::Stack stack_splitX;
@@ -267,7 +243,6 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	stack_splitX.push(i0);
 	stack_splitY.push(j0);
 
-	// NECESARIO?
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
 		return nullptr;
@@ -301,7 +276,7 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 			}
 			system("clear");
 			print();
-			usleep(50000);
+			// usleep(50000);
 		}
 	}
 
@@ -373,7 +348,7 @@ int** Maze::solveQueue(int i0, int j0, int i1, int j1) {
 		}
 		system("clear");
 		print();
-		usleep(10000);
+		// usleep(10000);
 	}
 
 
