@@ -15,6 +15,7 @@ const int Maze::WEST= 3;
 // TAREA
 int Maze::XMAX = 21;
 int Maze::YMAX = 21;
+// static int** arr1 = new int*[YMAX];
 // TAREA
 
 struct Maze::cell {
@@ -219,7 +220,6 @@ void Maze::Return(int &i, int &j, eda::Stack &stackX, eda::Stack &stackY, int to
 	i = topX;
 	j = topY;
 	
-	
 	while(stackX.top() -> getData() != topX || stackY.top() -> getData() != topY) {
 		stackX.pop();
 		stackY.pop();
@@ -262,6 +262,7 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	int jAux;
 	int options;
 	int** arr = new int*[YMAX];
+	stackSolLength = 0;
 
 	stack_splitX.push(i0);
 	stack_splitY.push(j0);
@@ -269,7 +270,7 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 	// NECESARIO?
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
-		exit(0);
+		return nullptr;
 	}
 
 	while (!finished) {
@@ -298,25 +299,23 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 				finished = true;
 				setWall(i, j, 3);
 			}
-			// system("clear");
-			// system("cls");
-			// print();
-			// usleep(1000);
+			system("clear");
+			print();
+			usleep(50000);
 		}
 	}
 
 	// NO ES LA MEJOR MANERA PERO POR MIENTRAS
 	// NOSE SI SE PUEDEN USAR VECTORES, POR MIENTRAS HACIENDO RESIZE A ARRAY
 	while(!stackX.isEmpty()) {
-		// std::cout << "[test maze] " << solLength << std::endl;
 		int xy[2] = {stackX.top()->getData(), stackY.top()->getData()};
-		arr[solLength] = new int[2];
-		arr[solLength][0] = xy[0];
-		arr[solLength][1] = xy[1];
+		arr[stackSolLength] = new int[2];
+		arr[stackSolLength][0] = xy[0];
+		arr[stackSolLength][1] = xy[1];
 		stackX.pop();
 		stackY.pop();
-		solLength++;
-		if (solLength == YMAX) {
+		stackSolLength++;
+		if (stackSolLength == YMAX) {
 			arr = resize(arr, YMAX, 2);
 		}
 	}
@@ -326,6 +325,8 @@ int** Maze::solveStack(int i0, int j0, int i1, int j1) {		//0 es incio, 1 es fin
 int** Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	eda::Queue queueX;
 	eda::Queue queueY;
+	eda::Queue returnQueueX;
+	eda::Queue returnQueueY;
 	bool finished = false;
 	int i = i0;
 	int j = j0;
@@ -333,31 +334,32 @@ int** Maze::solveQueue(int i0, int j0, int i1, int j1) {
 	int jAux;
 	int options;
 	int** arr = new int*[YMAX];
+	queueSolLength = 0;
 
 	if(grid[i0][j0] == 1 || grid[i1][j1] == 1) {
 		std::cout << "No hay camino posible..." << std::endl;
-		exit(0);
+		return nullptr;
 	}
 
-	queueX.push(i);
-	queueY.push(j);
+	queueX.push(i); returnQueueX.push(i);
+	queueY.push(j); returnQueueY.push(j);
 
 	while (!finished) {
 		options = Split(i, j);
 		
 		if (options > 1) {
 			iAux = i; jAux = j;
-			queueX.push(i);
-			queueY.push(j);
+			queueX.push(i); returnQueueX.push(i);
+			queueY.push(j); returnQueueY.push(j);
 			shuffle(i, j);
-			queueX.push(i);
-			queueY.push(j);
+			queueX.push(i); returnQueueX.push(i);
+			queueY.push(j); returnQueueY.push(j);
 			i = iAux; j = jAux;
 		}
 		shuffle(i, j);
 
-		queueX.push(i);
-		queueY.push(j);
+		queueX.push(i); returnQueueX.push(i);
+		queueY.push(j); returnQueueY.push(j);
 
 		queueX.pop();
 		queueY.pop();
@@ -365,25 +367,25 @@ int** Maze::solveQueue(int i0, int j0, int i1, int j1) {
 		i = queueX.top()->getData();
 		j = queueY.top()->getData();
 
-		// system("cls");
 		if (i == i1 && j == j1) {
 			finished = true;
 			setWall(i, j, 3);
 		}
-		// system("clear");
-		// print();
-		// usleep(1000);
+		system("clear");
+		print();
+		usleep(10000);
 	}
-	while(!queueX.isEmpty()) {
-		// std::cout << "[test maze] " << solLength << std::endl;
-		int xy[2] = {queueX.top()->getData(), queueY.top()->getData()};
-		arr[solLength] = new int[2];
-		arr[solLength][0] = xy[0];
-		arr[solLength][1] = xy[1];
-		queueX.pop();
-		queueY.pop();
-		solLength++;
-		if (solLength == YMAX) {
+
+
+	while(!returnQueueX.isEmpty()) {
+		int xy[2] = {returnQueueX.top()->getData(), returnQueueY.top()->getData()}; // ESTAN DADOS VUELTA
+		arr[queueSolLength] = new int[2];
+		arr[queueSolLength][0] = xy[0];
+		arr[queueSolLength][1] = xy[1];
+		returnQueueX.pop();
+		returnQueueY.pop();
+		queueSolLength++;
+		if (queueSolLength == YMAX) {
 			arr = resize(arr, YMAX, 2);
 		}
 	}

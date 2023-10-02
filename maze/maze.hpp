@@ -31,7 +31,9 @@ namespace maze {
 		// static int YMIN;
 		static int XMAX;
 		static int YMAX;
-		int solLength = 0;
+		// static int** arr1;
+		int stackSolLength = 0;
+		int queueSolLength = 0;
 		struct cell;
 		void clean();
 		int** resize(int** &array, int &n, int expand);
